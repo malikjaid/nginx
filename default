@@ -45,7 +45,7 @@ server {
 
 	server_name _;
 
-	location /api-docs {
+	location /api {
 		# First attempt to serve request as file, then
 		# as directory, then fall back to displaying a 404.
 		 proxy_pass http://nodejss:3001;  # Replace with your Node.js app's port
