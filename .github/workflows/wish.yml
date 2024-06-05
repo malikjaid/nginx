@@ -1,31 +1,20 @@
-name: demo
-
-on:
-  push:
-    branches:
-      - malikt
-
+name: Integration Test
+on: push
 jobs:
-  updateAuthorInfo:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout Repo
         uses: actions/checkout@v2
-
-      - name: Extract git commit data
-        uses: rlespinasse/git-commit-data-action@v1.x
-
-      - name: Raise PR
-        uses: peter-evans/create-pull-request@v3
+      - name: Get Versioning Data
+        id: versioning
+        uses: Soumeh/Auto-Versioning@main
+      - name: Create Release
+        uses: meeDamian/github-release@2.0
         with:
-          branch: malikt
-          base: main
-          title: "Demo for auto PR"
-          committer: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
-          author: ${{ env.GIT_COMMIT_AUTHOR_NAME }} <${{ env.GIT_COMMIT_AUTHOR_EMAIL }}>
-          body: |
-            This is to show automatic PR creation
           token: ${{ secrets.GITHUB_TOKEN }}
-          delete-branch: false
-
+          # names the release after the head commit
+          name: ${{ github.event.head_commit.message }}
+          tag: ${{ steps.versioning.outputs.tag }}
+          body: "${{ steps.versioning.outputs.changelog }}"
+          gzip: false
