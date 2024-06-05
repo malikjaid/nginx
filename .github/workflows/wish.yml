@@ -1,5 +1,5 @@
 name: Integration Test
-on: push
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,7 +10,7 @@ jobs:
         id: versioning
         uses: Soumeh/Auto-Versioning@main
       - name: Create Release
-        uses: meeDamian/github-release@v2.0
+        uses: meeDamian/github-release@2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           # names the release after the head commit
